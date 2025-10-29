@@ -27,8 +27,6 @@ export default function Footer() {
         { name: "Instagram", username: "tj.arya", url: "https://www.instagram.com/tj.arya?igsh=ZHZnbHlncHZuNDUx" },
     ];
 
-
-    // Track mouse movement for glow orb
     useEffect(() => {
         const handleMove = (e: MouseEvent) => setMouse({ x: e.clientX, y: e.clientY });
         window.addEventListener("mousemove", handleMove);
@@ -41,13 +39,64 @@ export default function Footer() {
         setTimeout(() => setSent(false), 3000);
     };
 
+    // Letters for the name
+    const nameLetters = "T JAGADEESH CHANDRA".split("");
+    const [triggerIndex, setTriggerIndex] = useState<number | null>(null);
+
+    // Letter component with wave animation
+    function Letter({ char, index }: { char: string, index: number }) {
+        const letterControls = useAnimation();
+
+        useEffect(() => {
+            if (triggerIndex === null) return;
+            const distance = Math.abs(triggerIndex - index);
+            const delay = distance * 0.05;
+
+            void letterControls.start({
+                y: [0, -12, 4, 0],
+                scale: [1, 1.45, 1.15, 1],
+                rotateY: [0, 28, -10, 0],
+                color: "#00ffe5",
+                textShadow: [
+                    "0px 0px 0px rgba(0,0,0,0)",
+                    "0 0 10px rgba(0,255,229,0.9)",
+                    "0 0 22px rgba(0,255,229,0.85)",
+                    "0 0 0px rgba(0,0,0,0)"
+                ],
+                transition: { duration: 0.45, ease: "easeInOut", delay },
+            });
+        }, [triggerIndex]);
+
+        const reset = () => {
+            void letterControls.start({
+                y: 0,
+                scale: 1,
+                rotateY: 0,
+                color: "#ffffff",
+                textShadow: "0 0 0px transparent",
+                transition: { duration: 0.35, ease: "easeOut" },
+            });
+        };
+
+        return (
+            <motion.span
+                onMouseEnter={() => setTriggerIndex(index)}
+                onMouseLeave={reset}
+                animate={letterControls}
+                className="inline-block transition-all duration-200 cursor-pointer hover:drop-shadow-[0_0_12px_#00ffe5]"
+            >
+                {char === " " ? "\u00A0" : char}
+            </motion.span>
+        );
+    }
+
     return (
         <footer
             id="footer"
             className="relative overflow-hidden w-full min-h-[80vh] 
-                 bg-linear-to-b from-[#0a0a0f] via-[#0b0f1f] to-[#1a1a20]
-                 text-[#e0e0e0] flex flex-col justify-center items-center 
-                 py-20 px-6 md:px-16"
+           bg-linear-to-b from-[#0a0a0f] via-[#0b0f1f] to-[#1a1a20]
+           text-[#e0e0e0] flex flex-col justify-center items-center 
+           py-20 px-6 md:px-16"
         >
             {/* Aurora background layers */}
             <div className="absolute inset-0 overflow-hidden">
@@ -85,68 +134,47 @@ export default function Footer() {
                 </span>
             </motion.p>
 
-            {/* Main content grid */}
-            <div className="relative z-10 mt-16 grid grid-cols-1 md:grid-cols-3 gap-12 w-full max-w-7xl">
-                {/* Left creative zone */}
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 1 }}
-                    className="flex flex-col justify-center text-center md:text-left"
-                >
-                    <h3 className="text-3xl font-medium text-[#00ffe5] mb-3">Let’s Build Something 🌠</h3>
-                    <p className="text-gray-400 leading-relaxed">
-                        I believe creativity thrives in collaboration — every message is a doorway to new
-                        possibilities. Let’s create something extraordinary together.
-                    </p>
-                </motion.div>
-
-                {/* Center Contact Form */}
+            {/* Main grid: Form + Social links */}
+            <div className="relative z-10 mt-16 grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-7xl">
+                {/* Contact Form */}
                 <motion.form
                     onSubmit={handleSubmit}
                     initial={{ opacity: 0, y: 40 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
                     className="bg-white/5 backdrop-blur-2xl border border-[#00ffe533] 
-                     p-8 rounded-2xl shadow-[0_0_30px_#00ffe533] 
-                     flex flex-col gap-4"
+                     p-8 rounded-2xl shadow-[0_0_40px_#00ffe533] 
+                     flex flex-col gap-6 w-full"
                 >
-                    {["Your Name", "Your Email", "Phone (optional)"].map((ph, i) => (
-                        <input
-                            key={i}
-                            type="text"
-                            required={i < 2}
-                            placeholder={ph}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" required placeholder="Your Name"
                             className="bg-transparent border-b border-[#00ffe533] focus:border-[#00ffe5] 
-                         outline-none text-white placeholder-gray-400 transition-all duration-300 py-2"
-                        />
-                    ))}
-                    <textarea
-                        rows={3}
-                        placeholder="Your Message"
-                        required
-                        className="bg-transparent border-b border-[#00ffe533] focus:border-[#00ffe5] 
-                       outline-none text-white placeholder-gray-400 transition-all duration-300 py-2"
-                    />
-
-                    <motion.button
-                        type="submit"
-                        whileTap={{ scale: 0.95 }}
-                        whileHover={{ scale: 1.02 }}
-                        className="relative overflow-hidden mt-4 py-2 rounded-full border border-[#00ffe5] 
-                       text-[#00ffe5] font-medium bg-linear-to-r from-[#00ffe533] to-[#8b5cf633]"
-                    >
-                        {sent ? (
-                            <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                                ✅ Sent Successfully!
-                            </motion.span>
-                        ) : (
-                            "Send Message"
-                        )}
+                         outline-none text-white placeholder-gray-400 transition-all duration-300 py-2"/>
+                        <input type="email" required placeholder="Your Email"
+                            className="bg-transparent border-b border-[#00ffe533] focus:border-[#00ffe5] 
+                         outline-none text-white placeholder-gray-400 transition-all duration-300 py-2"/>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" placeholder="Phone (optional)"
+                            className="bg-transparent border-b border-[#00ffe533] focus:border-[#00ffe5] 
+                         outline-none text-white placeholder-gray-400 transition-all duration-300 py-2"/>
+                        <input type="text" placeholder="Subject / Company (optional)"
+                            className="bg-transparent border-b border-[#00ffe533] focus:border-[#00ffe5] 
+                         outline-none text-white placeholder-gray-400 transition-all duration-300 py-2"/>
+                    </div>
+                    <textarea rows={6} placeholder="Your Message" required
+                        className="w-full md:w-full bg-transparent border border-[#00ffe533] 
+                       focus:border-[#00ffe5] outline-none text-white placeholder-gray-400 
+                       transition-all duration-300 p-3 rounded-xl resize-none mx-auto"/>
+                    <motion.button type="submit" whileTap={{ scale: 0.95 }} whileHover={{ scale: 1.03 }}
+                        className="relative overflow-hidden mt-4 py-3 rounded-full border border-[#00ffe5] 
+                       text-[#00ffe5] font-medium bg-linear-to-r from-[#00ffe533] to-[#8b5cf633] 
+                       tracking-wide uppercase shadow-[0_0_25px_#00ffe522]">
+                        {sent ? <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>✅ Sent Successfully!</motion.span> : "Send Message"}
                     </motion.button>
                 </motion.form>
 
-                {/* Right: Social Links */}
+                {/* Social Links */}
                 <div className="flex flex-col gap-6 items-center justify-center">
                     {socials.map((item) => (
                         <motion.a
@@ -161,10 +189,8 @@ export default function Footer() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                         >
-                            <motion.span
-                                animate={{ opacity: hovered === item.name ? 0 : 1, y: hovered === item.name ? -10 : 0 }}
-                                transition={{ duration: 0.3 }}
-                            >
+                            <motion.span animate={{ opacity: hovered === item.name ? 0 : 1, y: hovered === item.name ? -10 : 0 }}
+                                transition={{ duration: 0.3 }}>
                                 {item.name}
                             </motion.span>
                             <motion.span
@@ -182,9 +208,19 @@ export default function Footer() {
                             />
                         </motion.a>
                     ))}
-
                 </div>
             </div>
+
+            {/* Animated Name with ripple/wave */}
+            {/* Animated Name with ripple/wave */}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9 }} className="mt-20 max-w-3xl text-center">
+                <div className="flex justify-center gap-2 text-6xl md:text-7xl font-bold select-none">
+                    {nameLetters.map((char, i) => (
+                        <Letter key={i} char={char} index={i} />
+                    ))}
+                </div>
+            </motion.div>
 
             {/* Footer note */}
             <div className="mt-20 text-center text-sm text-gray-400">

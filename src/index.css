@@ -1,1 +1,110 @@
 @import "tailwindcss";
+@import "@fontsource/montserrat/700.css";
+@import "@fontsource/poppins/400.css";
+
+.btn-animated {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid #00ffe5;
+  border-radius: 0.5rem;
+  color: #00ffe5; /* default text */
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: box-shadow 0.4s ease; /* remove color from here */
+}
+
+.btn-animated span {
+  position: relative;
+  z-index: 20;
+  transition: color 0.4s ease;
+  color: inherit; /* inherit from button by default */
+}
+
+.btn-animated:hover span {
+  color: #06080a; /* black on hover */
+}
+
+.btn-animated::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: #00ffe5;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 0; /* below text */
+  border-radius: inherit;
+}
+
+.btn-animated:hover::before {
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+.btn-animated:hover {
+  box-shadow: 0 0 15px #00ffe5;
+}
+
+
+/* Custom Animations */
+@keyframes glow-pulse {
+
+  0%,
+  100% {
+    box-shadow: var(--glow-primary);
+  }
+
+  50% {
+    box-shadow: var(--glow-strong);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@layer base {
+  body {
+    background-color: #06080a;
+    color: #dfffff;
+    font-family: 'Space Grotesk', sans-serif; /* ✅ Correct way */
+  }
+}
+
+
+
+@layer utilities {
+  .glow-cyan {
+    box-shadow: var(--glow-primary);
+  }
+
+  .glow-cyan-strong {
+    box-shadow: var(--glow-strong);
+  }
+
+  .glow-cyan-subtle {
+    box-shadow: var(--glow-subtle);
+  }
+
+  .animate-glow {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+}

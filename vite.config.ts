@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/jagadeesh-portfolio/',
   server: {
-    host: true
+    host: true,
+    port: 3000,
   }
 })

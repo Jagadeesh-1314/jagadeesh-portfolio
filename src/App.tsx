@@ -1,34 +1,43 @@
-import Hero from "./components/Hero";
-import { TransitionOverlay } from "./Transition/transition";
-import Projects from "./components/Projects";
-import Education from "./components/Education";
-import ExperienceOrbit from "./components/ExperienceOrbit";
-import { useEffect } from "react";
-import Lenis from "@studio-freight/lenis";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger);
+import { AnimatePresence } from "framer-motion";
+import { Route, Routes, useLocation } from "react-router-dom";
+import AboutMeFull from "./Pages/AboutMe.tsx/Aboutme";
+import NotFound from "./components/NotFound/NotFound";
+import Home from "./Pages/Home/Home";
+import ProjectsList from "./Pages/Projects/ProjectsList";
+import ProjectDetails from "./Pages/Projects/ProjectDetails";
 
-export default function App() {
-  useEffect(() => {
-    const lenis = new Lenis();
-    function raf(time: DOMHighResTimeStamp) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-  }, []);
+export default function AnimatedRoutes() {
+  const paths = [
+    {
+      path: "/jagadeesh-portfolio/",
+      element: <Home />,
+    },
+    {
+      path: "/jagadeesh-portfolio/projects",
+      element: <ProjectsList />,
+    },
+    {
+      path: "/jagadeesh-portfolio/about-me",
+      element: <AboutMeFull />,
+    },
+    {
+      path: "/jagadeesh-portfolio/projects/:slug",
+      element: <ProjectDetails />
+    },
+    {
+      path: "/jagadeesh-portfolio/*",
+      element: <NotFound />,
+    },
+  ];
+  const location = useLocation();
+
   return (
-    <div className="overflow-x-hidden ">
-      <TransitionOverlay >
-        <div>
-          <Hero />
-          <Projects />
-          <ExperienceOrbit />
-          <Education />
-          {/* More sections will come later */}
-        </div>
-      </ TransitionOverlay>
-    </div>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        {paths.map(({ path, element }) => (
+          <Route key={path} path={path} element={element} />
+        ))}
+      </Routes>
+    </AnimatePresence>
   );
 }

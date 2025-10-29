@@ -143,8 +143,8 @@ export default function Hero() {
         className="text-[#00ffe5] font-bold drop-shadow-[0_0_20px_#00ffe5]
        tracking-widest scale-x-105 text-center
        flex flex-nowrap justify-center items-center
-       whitespace-nowrap overflow-x-auto
-       text-[clamp(1.5rem,6vw,5rem)]"
+       whitespace-nowrap overflow-hidden
+       text-[clamp(1.5rem,8vw,5rem)]"
         style={{ WebkitOverflowScrolling: 'touch' }} // smoother scrolling on mobile
       >
         {name.split("").map((char, index) => (
