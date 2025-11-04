@@ -43,7 +43,7 @@ export default function Footer() {
     const nameLetters = "T JAGADEESH CHANDRA".split("");
     const [triggerIndex, setTriggerIndex] = useState<number | null>(null);
 
-    // Letter component with wave animation
+    // Letter component with enhanced wave animation
     function Letter({ char, index }: { char: string, index: number }) {
         const letterControls = useAnimation();
 
@@ -56,25 +56,34 @@ export default function Footer() {
                 y: [0, -12, 4, 0],
                 scale: [1, 1.45, 1.15, 1],
                 rotateY: [0, 28, -10, 0],
+                rotateZ: [0, 5, -5, 0],
                 color: "#00ffe5",
                 textShadow: [
                     "0px 0px 0px rgba(0,0,0,0)",
-                    "0 0 10px rgba(0,255,229,0.9)",
-                    "0 0 22px rgba(0,255,229,0.85)",
+                    "0 0 15px rgba(0,255,229,0.9), 0 0 30px rgba(0,255,229,0.6)",
+                    "0 0 25px rgba(0,255,229,0.85), 0 0 40px rgba(139,92,246,0.4)",
                     "0 0 0px rgba(0,0,0,0)"
                 ],
-                transition: { duration: 0.45, ease: "easeInOut", delay },
+                filter: [
+                    "brightness(1)",
+                    "brightness(1.5)",
+                    "brightness(1.3)",
+                    "brightness(1)"
+                ],
+                transition: { duration: 0.5, ease: "easeInOut", delay },
             });
-        }, [triggerIndex]);
+        }, [triggerIndex, letterControls, index]);
 
         const reset = () => {
             void letterControls.start({
                 y: 0,
                 scale: 1,
                 rotateY: 0,
+                rotateZ: 0,
                 color: "#ffffff",
                 textShadow: "0 0 0px transparent",
-                transition: { duration: 0.35, ease: "easeOut" },
+                filter: "brightness(1)",
+                transition: { duration: 0.4, ease: "easeOut" },
             });
         };
 
@@ -83,7 +92,8 @@ export default function Footer() {
                 onMouseEnter={() => setTriggerIndex(index)}
                 onMouseLeave={reset}
                 animate={letterControls}
-                className="inline-block transition-all duration-200 cursor-pointer hover:drop-shadow-[0_0_12px_#00ffe5]"
+                className="inline-block transition-all duration-200 cursor-pointer hover:drop-shadow-[0_0_15px_#00ffe5]"
+                style={{ transformStyle: "preserve-3d" }}
             >
                 {char === " " ? "\u00A0" : char}
             </motion.span>
@@ -96,7 +106,7 @@ export default function Footer() {
             className="relative overflow-hidden w-full min-h-[80vh] 
            bg-linear-to-b from-[#0a0a0f] via-[#0b0f1f] to-[#1a1a20]
            text-[#e0e0e0] flex flex-col justify-center items-center 
-           py-20 px-6 md:px-16"
+           py-12 md:py-20 px-4 md:px-16"
         >
             {/* Aurora background layers */}
             <div className="absolute inset-0 overflow-hidden">
@@ -106,7 +116,7 @@ export default function Footer() {
 
             {/* Floating glow orb */}
             <motion.div
-                className="pointer-events-none fixed w-[250px] h-[250px] bg-[#00ffe5]/15 rounded-full blur-[120px]"
+                className="pointer-events-none fixed w-[200px] h-[200px] md:w-[250px] md:h-[250px] bg-[#00ffe5]/15 rounded-full blur-[120px]"
                 animate={{ x: mouse.x - 125, y: mouse.y - 125 }}
                 transition={{ type: "spring", stiffness: 80, damping: 25 }}
             />
@@ -116,21 +126,21 @@ export default function Footer() {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
-                className="text-5xl md:text-6xl font-semibold text-center bg-linear-to-r from-[#00ffe5] via-[#00ffff] to-[#8b5cf6] bg-clip-text text-transparent drop-shadow-[0_0_20px_#00ffe5aa]"
+                className="text-[clamp(2rem,6vw,4rem)] font-semibold text-center bg-linear-to-r from-[#00ffe5] via-[#00ffff] to-[#8b5cf6] bg-clip-text text-transparent drop-shadow-[0_0_20px_#00ffe5aa]"
             >
-                Let’s Connect 🌐
+                Let's Connect 🌐
             </motion.h2>
 
             <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 1 }}
-                className="text-gray-300 text-center mt-4 max-w-2xl leading-relaxed"
+                className="text-gray-300 text-center mt-4 max-w-2xl leading-relaxed text-[clamp(0.9rem,1.5vw,1.1rem)] px-4"
             >
                 Got an idea, collaboration, or just want to say hi? Drop your message below!
                 <br />
-                <span className="italic text-sm text-[#bdfaff]">
-                    “Every great story starts with a message.”
+                <span className="italic text-[clamp(0.8rem,1.2vw,0.95rem)] text-[#bdfaff]">
+                    "Every great story starts with a message."
                 </span>
             </motion.p>
 
@@ -184,13 +194,13 @@ export default function Footer() {
                             rel="noopener noreferrer"
                             onMouseEnter={() => setHovered(item.name)}
                             onMouseLeave={() => setHovered(null)}
-                            className="relative text-2xl font-medium cursor-pointer inline-block"
+                            className="relative text-[clamp(1.2rem,3vw,2rem)] font-medium cursor-pointer inline-block"
+                            // className="relative text-[clamp(1.2rem,3vw,2rem)] font-medium cursor-pointer inline-block w-full text-center md:text-left"
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
                         >
-                            <motion.span animate={{ opacity: hovered === item.name ? 0 : 1, y: hovered === item.name ? -10 : 0 }}
-                                transition={{ duration: 0.3 }}>
+                           <motion.span animate={{ opacity: hovered === item.name ? 0 : 1, y: hovered === item.name ? -10 : 0 }} transition={{ duration: 0.3 }} className="block" >
                                 {item.name}
                             </motion.span>
                             <motion.span
@@ -212,10 +222,13 @@ export default function Footer() {
             </div>
 
             {/* Animated Name with ripple/wave */}
-            {/* Animated Name with ripple/wave */}
-            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.9 }} className="mt-20 max-w-3xl text-center">
-                <div className="flex justify-center gap-2 text-6xl md:text-7xl font-bold select-none">
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9 }}
+                className="mt-12 md:mt-20 w-full px-4 text-center"
+            >
+                <div className="flex flex-wrap justify-center gap-1 md:gap-2 text-[clamp(1.5rem,5vw,4.5rem)] font-bold select-none leading-tight">
                     {nameLetters.map((char, i) => (
                         <Letter key={i} char={char} index={i} />
                     ))}
@@ -223,7 +236,7 @@ export default function Footer() {
             </motion.div>
 
             {/* Footer note */}
-            <div className="mt-20 text-center text-sm text-gray-400">
+            <div className="mt-12 md:mt-20 text-center text-[clamp(0.75rem,1.2vw,0.9rem)] text-gray-400 px-4">
                 © 2025 <span className="text-[#00ffe5] font-medium">T Jagadeesh Chandra</span> | Crafted with ❤️ & Code
             </div>
 
