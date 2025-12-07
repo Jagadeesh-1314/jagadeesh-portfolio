@@ -148,8 +148,7 @@ export default function TechStack() {
   return (
     <div ref={sectionRef} className=" text-white overflow-hidden">
       {/* Animated Title Section */}
-      {/* Animated Title Section */}
-      <div className="w-full px-6 md:px-16 m-5 p-0 mb-28">
+      <div className="w-full px-6 md:px-16 m-5 p-0 md:mb-10">
         <h1
           ref={titleRef}
           className="font-bold tracking-widest text-[#00ffe5] drop-shadow-[0_0_15px_#00ffe5] m-0 p-0 leading-none"
@@ -351,15 +350,6 @@ export default function TechStack() {
 
       {/* Mobile View */}
       <div className="md:hidden flex flex-col items-center justify-start min-h-screen px-4 py-12 gap-6">
-        <motion.h1
-          className="text-3xl font-bold text-center bg-linear-to-r from-[#00ffe5] to-[#00ff9f] bg-clip-text text-transparent mb-4"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          My Tech Stack
-        </motion.h1>
-
         <motion.p
           className="text-gray-300 text-center text-sm px-4 mb-6"
           initial={{ opacity: 0 }}
